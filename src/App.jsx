@@ -73,6 +73,14 @@ function App() {
     setWaitingForSecondNumber(true);
   }
 
+  // Percentage
+  function handlePercentage() {
+    const number = Number(display);
+    const result = number / 100;
+
+    setDisplay(String(result));
+  }
+
   // Equal
   function handleEquals() {
     if (firstNumber !== null && operation !== null) {
@@ -130,7 +138,7 @@ function App() {
           DEL
         </button>
 
-        <button className="operator">
+        <button className="operator" onClick={handlePercentage}>
           %
         </button>
 
