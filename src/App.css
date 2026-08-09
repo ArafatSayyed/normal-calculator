@@ -7,3 +7,18 @@
   background: #222;
 }
 
+.display
+{
+  height: 70px;
+  margin-bottom: 20px;
+  padding: 0 15px;
+  border-radius: 10px;
+  background: #111;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 32px;
+  box-sizing: border-box;
+}
+
