@@ -1,35 +1,36 @@
 import { useState } from "react";
 
-function App()
-{
+function App() {
   const [display, setDisplay] = useState("0");
 
   // Number button
-  function handleNumber(number)
-  {
-    if (display === "0")
-    {
+  function handleNumber(number) {
+    if (display === "0") {
       setDisplay(number);
-    }
-    else
-    {
+    } else {
       setDisplay(display + number);
     }
   }
 
   // Decimal button
-  function handleDecimal()
-  {
-    if (!display.includes("."))
-    {
+  function handleDecimal() {
+    if (!display.includes(".")) {
       setDisplay(display + ".");
     }
   }
 
   // AC button
-  function handleClear()
-  {
+  function handleClear() {
     setDisplay("0");
+  }
+
+  // DEL button
+  function handleDelete() {
+    if (display.length === 1) {
+      setDisplay("0");
+    } else {
+      setDisplay(display.slice(0, -1));
+    }
   }
 
   return (
@@ -48,7 +49,7 @@ function App()
           AC
         </button>
 
-        <button className="delete">
+        <button className="delete" onClick={handleDelete}>
           DEL
         </button>
 
