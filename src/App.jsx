@@ -66,6 +66,13 @@ function App() {
     setWaitingForSecondNumber(true);
   }
 
+  // Division
+  function handleDivision() {
+    setFirstNumber(Number(display));
+    setOperation("/");
+    setWaitingForSecondNumber(true);
+  }
+
   // Equal
   function handleEquals() {
     if (firstNumber !== null && operation !== null) {
@@ -82,6 +89,18 @@ function App() {
 
       if (operation === "*") {
         result = firstNumber * secondNumber;
+      }
+
+      if (operation === "/") {
+        if (secondNumber === 0) {
+          setDisplay("Error");
+          setFirstNumber(null);
+          setOperation(null);
+          setWaitingForSecondNumber(false);
+          return;
+        }
+
+        result = firstNumber / secondNumber;
       }
 
       setDisplay(String(result));
@@ -115,7 +134,7 @@ function App() {
           %
         </button>
 
-        <button className="operator">
+        <button className="operator" onClick={handleDivision}>
           ÷
         </button>
 
