@@ -1,35 +1,46 @@
 import { useState } from "react";
 
-function App() {
+function App()
+{
   const [display, setDisplay] = useState("0");
   const [firstNumber, setFirstNumber] = useState(null);
   const [operation, setOperation] = useState(null);
   const [waitingForSecondNumber, setWaitingForSecondNumber] = useState(false);
 
   // Number button
-  function handleNumber(number) {
-    if (waitingForSecondNumber) {
+  function handleNumber(number)
+  {
+    if (waitingForSecondNumber)
+    {
       setDisplay(number);
       setWaitingForSecondNumber(false);
-    } else if (display === "0") {
+    }
+    else if (display === "0")
+    {
       setDisplay(number);
-    } else {
+    }
+    else{
       setDisplay(display + number);
     }
   }
 
   // Decimal button
-  function handleDecimal() {
-    if (waitingForSecondNumber) {
+  function handleDecimal()
+  {
+    if (waitingForSecondNumber)
+    {
       setDisplay("0.");
       setWaitingForSecondNumber(false);
-    } else if (!display.includes(".")) {
+    }
+    else if (!display.includes("."))
+    {
       setDisplay(display + ".");
     }
   }
 
   // AC button
-  function handleClear() {
+  function handleClear()
+  {
     setDisplay("0");
     setFirstNumber(null);
     setOperation(null);
@@ -37,44 +48,53 @@ function App() {
   }
 
   // DEL button
-  function handleDelete() {
-    if (display.length === 1) {
+  function handleDelete()
+  {
+    if (display.length === 1)
+    {
       setDisplay("0");
-    } else {
+    }
+    else
+    {
       setDisplay(display.slice(0, -1));
     }
   }
 
   // Addition
-  function handleAddition() {
+  function handleAddition()
+  {
     setFirstNumber(Number(display));
     setOperation("+");
     setWaitingForSecondNumber(true);
   }
 
   // Subtraction
-  function handleSubtraction() {
+  function handleSubtraction()
+  {
     setFirstNumber(Number(display));
     setOperation("-");
     setWaitingForSecondNumber(true);
   }
 
   // Multiplication
-  function handleMultiplication() {
+  function handleMultiplication()
+  {
     setFirstNumber(Number(display));
     setOperation("*");
     setWaitingForSecondNumber(true);
   }
 
   // Division
-  function handleDivision() {
+  function handleDivision()
+  {
     setFirstNumber(Number(display));
     setOperation("/");
     setWaitingForSecondNumber(true);
   }
 
   // Percentage
-  function handlePercentage() {
+  function handlePercentage()
+  {
     const number = Number(display);
     const result = number / 100;
 
@@ -82,25 +102,32 @@ function App() {
   }
 
   // Equal
-  function handleEquals() {
-    if (firstNumber !== null && operation !== null) {
+  function handleEquals()
+  {
+    if (firstNumber !== null && operation !== null)
+    {
       const secondNumber = Number(display);
       let result;
 
-      if (operation === "+") {
+      if (operation === "+")
+      {
         result = firstNumber + secondNumber;
       }
 
-      if (operation === "-") {
+      if (operation === "-")
+      {
         result = firstNumber - secondNumber;
       }
 
-      if (operation === "*") {
+      if (operation === "*")
+      {
         result = firstNumber * secondNumber;
       }
 
-      if (operation === "/") {
-        if (secondNumber === 0) {
+      if (operation === "/")
+      {
+        if (secondNumber === 0)
+        {
           setDisplay("Error");
           setFirstNumber(null);
           setOperation(null);
@@ -195,3 +222,4 @@ function App() {
 }
 
 export default App;
+
