@@ -15,8 +15,16 @@ function App()
       setDisplay(display + number);
     }
   }
-  return
-  (
+
+  function handleDecimal()
+  {
+    if (!display.includes("."))
+    {
+      setDisplay(display + ".");
+    }
+  }
+
+  return (
     <div className="calculator">
       <div className="display">{display}</div>
 
@@ -44,7 +52,9 @@ function App()
         <button className="zero" onClick={() => handleNumber("0")}>
           0
         </button>
-        <button>.</button>
+
+        <button onClick={handleDecimal}>.</button>
+
         <button className="equals">=</button>
       </div>
     </div>
