@@ -7,7 +7,8 @@ function App() {
   const [waitingForSecondNumber, setWaitingForSecondNumber] = useState(false);
 
   // Number button
-  function handleNumber(number) {
+  function handleNumber(number)
+  {
     if (waitingForSecondNumber) {
       setDisplay(number);
       setWaitingForSecondNumber(false);
