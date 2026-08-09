@@ -49,3 +49,15 @@
   color: white;
 }
 
+.clear,.delete
+{
+  background: #666;
+  color: white;
+}
+
+.equals
+{
+  background: #2196f3;
+  color: white;
+}
+
