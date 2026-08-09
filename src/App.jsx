@@ -1,46 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function App()
-{
+function App() {
   const [display, setDisplay] = useState("0");
   const [firstNumber, setFirstNumber] = useState(null);
   const [operation, setOperation] = useState(null);
   const [waitingForSecondNumber, setWaitingForSecondNumber] = useState(false);
 
   // Number button
-  function handleNumber(number)
-  {
-    if (waitingForSecondNumber)
-    {
+  function handleNumber(number) {
+    if (waitingForSecondNumber) {
       setDisplay(number);
       setWaitingForSecondNumber(false);
-    }
-    else if (display === "0")
-    {
+    } else if (display === "0") {
       setDisplay(number);
-    }
-    else{
+    } else {
       setDisplay(display + number);
     }
   }
 
   // Decimal button
-  function handleDecimal()
-  {
-    if (waitingForSecondNumber)
-    {
+  function handleDecimal() {
+    if (waitingForSecondNumber) {
       setDisplay("0.");
       setWaitingForSecondNumber(false);
-    }
-    else if (!display.includes("."))
-    {
+    } else if (!display.includes(".")) {
       setDisplay(display + ".");
     }
   }
 
   // AC button
-  function handleClear()
-  {
+  function handleClear() {
     setDisplay("0");
     setFirstNumber(null);
     setOperation(null);
@@ -48,53 +37,44 @@ function App()
   }
 
   // DEL button
-  function handleDelete()
-  {
-    if (display.length === 1)
-    {
+  function handleDelete() {
+    if (display.length === 1) {
       setDisplay("0");
-    }
-    else
-    {
+    } else {
       setDisplay(display.slice(0, -1));
     }
   }
 
   // Addition
-  function handleAddition()
-  {
+  function handleAddition() {
     setFirstNumber(Number(display));
     setOperation("+");
     setWaitingForSecondNumber(true);
   }
 
   // Subtraction
-  function handleSubtraction()
-  {
+  function handleSubtraction() {
     setFirstNumber(Number(display));
     setOperation("-");
     setWaitingForSecondNumber(true);
   }
 
   // Multiplication
-  function handleMultiplication()
-  {
+  function handleMultiplication() {
     setFirstNumber(Number(display));
     setOperation("*");
     setWaitingForSecondNumber(true);
   }
 
   // Division
-  function handleDivision()
-  {
+  function handleDivision() {
     setFirstNumber(Number(display));
     setOperation("/");
     setWaitingForSecondNumber(true);
   }
 
   // Percentage
-  function handlePercentage()
-  {
+  function handlePercentage() {
     const number = Number(display);
     const result = number / 100;
 
@@ -102,32 +82,25 @@ function App()
   }
 
   // Equal
-  function handleEquals()
-  {
-    if (firstNumber !== null && operation !== null)
-    {
+  function handleEquals() {
+    if (firstNumber !== null && operation !== null) {
       const secondNumber = Number(display);
       let result;
 
-      if (operation === "+")
-      {
+      if (operation === "+") {
         result = firstNumber + secondNumber;
       }
 
-      if (operation === "-")
-      {
+      if (operation === "-") {
         result = firstNumber - secondNumber;
       }
 
-      if (operation === "*")
-      {
+      if (operation === "*") {
         result = firstNumber * secondNumber;
       }
 
-      if (operation === "/")
-      {
-        if (secondNumber === 0)
-        {
+      if (operation === "/") {
+        if (secondNumber === 0) {
           setDisplay("Error");
           setFirstNumber(null);
           setOperation(null);
@@ -145,6 +118,60 @@ function App()
     }
   }
 
+  // Keyboard support
+  useEffect(() => {
+    function handleKeyDown(event) {
+      const key = event.key;
+
+      if (key >= "0" && key <= "9") {
+        handleNumber(key);
+      }
+
+      else if (key === ".") {
+        handleDecimal();
+      }
+
+      else if (key === "+") {
+        handleAddition();
+      }
+
+      else if (key === "-") {
+        handleSubtraction();
+      }
+
+      else if (key === "*") {
+        handleMultiplication();
+      }
+
+      else if (key === "/") {
+        event.preventDefault();
+        handleDivision();
+      }
+
+      else if (key === "%") {
+        handlePercentage();
+      }
+
+      else if (key === "Enter" || key === "=") {
+        handleEquals();
+      }
+
+      else if (key === "Backspace") {
+        handleDelete();
+      }
+
+      else if (key === "Escape") {
+        handleClear();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  });
+
   return (
     <div className="calculator">
 
@@ -156,7 +183,6 @@ function App()
       {/* Calculator Buttons */}
       <div className="buttons">
 
-        {/* Top Row */}
         <button className="clear" onClick={handleClear}>
           AC
         </button>
@@ -173,7 +199,6 @@ function App()
           ÷
         </button>
 
-        {/* 7 8 9 */}
         <button onClick={() => handleNumber("7")}>7</button>
         <button onClick={() => handleNumber("8")}>8</button>
         <button onClick={() => handleNumber("9")}>9</button>
@@ -182,7 +207,6 @@ function App()
           ×
         </button>
 
-        {/* 4 5 6 */}
         <button onClick={() => handleNumber("4")}>4</button>
         <button onClick={() => handleNumber("5")}>5</button>
         <button onClick={() => handleNumber("6")}>6</button>
@@ -191,7 +215,6 @@ function App()
           −
         </button>
 
-        {/* 1 2 3 */}
         <button onClick={() => handleNumber("1")}>1</button>
         <button onClick={() => handleNumber("2")}>2</button>
         <button onClick={() => handleNumber("3")}>3</button>
@@ -200,7 +223,6 @@ function App()
           +
         </button>
 
-        {/* Bottom Row */}
         <button
           className="zero"
           onClick={() => handleNumber("0")}
@@ -222,4 +244,3 @@ function App()
 }
 
 export default App;
-
