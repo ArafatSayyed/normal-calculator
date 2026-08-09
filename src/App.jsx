@@ -3,6 +3,7 @@ import { useState } from "react";
 function App() {
   const [display, setDisplay] = useState("0");
   const [firstNumber, setFirstNumber] = useState(null);
+  const [operation, setOperation] = useState(null);
   const [waitingForSecondNumber, setWaitingForSecondNumber] = useState(false);
 
   // Number button
@@ -31,6 +32,7 @@ function App() {
   function handleClear() {
     setDisplay("0");
     setFirstNumber(null);
+    setOperation(null);
     setWaitingForSecondNumber(false);
   }
 
@@ -43,20 +45,37 @@ function App() {
     }
   }
 
-  // Addition button
+  // Addition
   function handleAddition() {
     setFirstNumber(Number(display));
+    setOperation("+");
     setWaitingForSecondNumber(true);
   }
 
-  // Equal button
+  // Subtraction
+  function handleSubtraction() {
+    setFirstNumber(Number(display));
+    setOperation("-");
+    setWaitingForSecondNumber(true);
+  }
+
+  // Equal
   function handleEquals() {
-    if (firstNumber !== null) {
+    if (firstNumber !== null && operation !== null) {
       const secondNumber = Number(display);
-      const result = firstNumber + secondNumber;
+      let result;
+
+      if (operation === "+") {
+        result = firstNumber + secondNumber;
+      }
+
+      if (operation === "-") {
+        result = firstNumber - secondNumber;
+      }
 
       setDisplay(String(result));
       setFirstNumber(null);
+      setOperation(null);
       setWaitingForSecondNumber(false);
     }
   }
@@ -103,7 +122,7 @@ function App() {
         <button onClick={() => handleNumber("5")}>5</button>
         <button onClick={() => handleNumber("6")}>6</button>
 
-        <button className="operator">
+        <button className="operator" onClick={handleSubtraction}>
           −
         </button>
 
@@ -112,7 +131,6 @@ function App() {
         <button onClick={() => handleNumber("2")}>2</button>
         <button onClick={() => handleNumber("3")}>3</button>
 
-        {/* Addition */}
         <button className="operator" onClick={handleAddition}>
           +
         </button>
