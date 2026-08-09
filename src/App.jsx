@@ -7,8 +7,7 @@ function App() {
   const [waitingForSecondNumber, setWaitingForSecondNumber] = useState(false);
 
   // Number button
-  function handleNumber(number)
-  {
+  function handleNumber(number) {
     if (waitingForSecondNumber) {
       setDisplay(number);
       setWaitingForSecondNumber(false);
@@ -60,6 +59,13 @@ function App() {
     setWaitingForSecondNumber(true);
   }
 
+  // Multiplication
+  function handleMultiplication() {
+    setFirstNumber(Number(display));
+    setOperation("*");
+    setWaitingForSecondNumber(true);
+  }
+
   // Equal
   function handleEquals() {
     if (firstNumber !== null && operation !== null) {
@@ -72,6 +78,10 @@ function App() {
 
       if (operation === "-") {
         result = firstNumber - secondNumber;
+      }
+
+      if (operation === "*") {
+        result = firstNumber * secondNumber;
       }
 
       setDisplay(String(result));
@@ -114,7 +124,7 @@ function App() {
         <button onClick={() => handleNumber("8")}>8</button>
         <button onClick={() => handleNumber("9")}>9</button>
 
-        <button className="operator">
+        <button className="operator" onClick={handleMultiplication}>
           ×
         </button>
 
