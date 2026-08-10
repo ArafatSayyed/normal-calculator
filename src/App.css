@@ -1,7 +1,23 @@
+*{
+  box-sizing: border-box;
+}
+
+body
+{
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+}
+
 .calculator
 {
   width: 320px;
-  margin: 50px auto;
+  max-width: 95vw;
+  margin: 20px auto;
   padding: 20px;
   border-radius: 20px;
   background: #222;
@@ -9,7 +25,8 @@
 
 .display
 {
-  height: 70px;
+  width: 100%;
+  min-height: 70px;
   margin-bottom: 20px;
   padding: 0 15px;
   border-radius: 10px;
@@ -19,7 +36,8 @@
   align-items: center;
   justify-content: flex-end;
   font-size: 32px;
-  box-sizing: border-box;
+  overflow: hidden;
+  word-break: break-all;
 }
 
 .buttons
@@ -36,11 +54,17 @@
   border-radius: 12px;
   font-size: 20px;
   cursor: pointer;
+  transition: transform 0.1s ease, opacity 0.1s ease;
 }
 
 .buttons button:hover
 {
   opacity: 0.8;
+}
+
+.buttons button:active
+{
+  transform: scale(0.95);
 }
 
 .operator
@@ -66,3 +90,29 @@
   grid-column: span 2;
 }
 
+/* Mobile responsive design */
+@media (max-width: 400px)
+{
+  .calculator
+  {
+    width: 95vw;
+    padding: 15px;
+  }
+
+  .display
+  {
+    min-height: 65px;
+    font-size: 28px;
+  }
+
+  .buttons
+  {
+    gap: 8px;
+  }
+
+  .buttons button
+  {
+    height: 55px;
+    font-size: 18px;
+  }
+}

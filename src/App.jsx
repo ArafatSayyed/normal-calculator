@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./App.css";
 
 function App() {
   const [display, setDisplay] = useState("0");
@@ -6,8 +7,32 @@ function App() {
   const [operation, setOperation] = useState(null);
   const [waitingForSecondNumber, setWaitingForSecondNumber] = useState(false);
 
+  // Button click sound
+  function playClickSound() {
+    const audioContext = new AudioContext();
+
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.frequency.value = 600;
+    gainNode.gain.value = 0.08;
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.05);
+  }
+
   // Number button
   function handleNumber(number) {
+    playClickSound();
+
+    if (display === "Error") {
+      setDisplay(number);
+      return;
+    }
+
     if (waitingForSecondNumber) {
       setDisplay(number);
       setWaitingForSecondNumber(false);
@@ -18,8 +43,10 @@ function App() {
     }
   }
 
-  // Decimal button
+  // Decimal
   function handleDecimal() {
+    playClickSound();
+
     if (waitingForSecondNumber) {
       setDisplay("0.");
       setWaitingForSecondNumber(false);
@@ -28,53 +55,42 @@ function App() {
     }
   }
 
-  // AC button
+  // AC
   function handleClear() {
+    playClickSound();
+
     setDisplay("0");
     setFirstNumber(null);
     setOperation(null);
     setWaitingForSecondNumber(false);
   }
 
-  // DEL button
+  // DEL
   function handleDelete() {
-    if (display.length === 1) {
+    playClickSound();
+
+    if (display === "Error" || display.length === 1) {
       setDisplay("0");
     } else {
       setDisplay(display.slice(0, -1));
     }
   }
 
-  // Addition
-  function handleAddition() {
-    setFirstNumber(Number(display));
-    setOperation("+");
-    setWaitingForSecondNumber(true);
-  }
+  // Operator
+  function handleOperator(operator) {
+    playClickSound();
 
-  // Subtraction
-  function handleSubtraction() {
-    setFirstNumber(Number(display));
-    setOperation("-");
-    setWaitingForSecondNumber(true);
-  }
+    const number = Number(display);
 
-  // Multiplication
-  function handleMultiplication() {
-    setFirstNumber(Number(display));
-    setOperation("*");
-    setWaitingForSecondNumber(true);
-  }
-
-  // Division
-  function handleDivision() {
-    setFirstNumber(Number(display));
-    setOperation("/");
+    setFirstNumber(number);
+    setOperation(operator);
     setWaitingForSecondNumber(true);
   }
 
   // Percentage
   function handlePercentage() {
+    playClickSound();
+
     const number = Number(display);
     const result = number / 100;
 
@@ -83,39 +99,43 @@ function App() {
 
   // Equal
   function handleEquals() {
-    if (firstNumber !== null && operation !== null) {
-      const secondNumber = Number(display);
-      let result;
+    playClickSound();
 
-      if (operation === "+") {
-        result = firstNumber + secondNumber;
-      }
-
-      if (operation === "-") {
-        result = firstNumber - secondNumber;
-      }
-
-      if (operation === "*") {
-        result = firstNumber * secondNumber;
-      }
-
-      if (operation === "/") {
-        if (secondNumber === 0) {
-          setDisplay("Error");
-          setFirstNumber(null);
-          setOperation(null);
-          setWaitingForSecondNumber(false);
-          return;
-        }
-
-        result = firstNumber / secondNumber;
-      }
-
-      setDisplay(String(result));
-      setFirstNumber(null);
-      setOperation(null);
-      setWaitingForSecondNumber(false);
+    if (firstNumber === null || operation === null) {
+      return;
     }
+
+    const secondNumber = Number(display);
+    let result;
+
+    if (operation === "+") {
+      result = firstNumber + secondNumber;
+    }
+
+    if (operation === "-") {
+      result = firstNumber - secondNumber;
+    }
+
+    if (operation === "*") {
+      result = firstNumber * secondNumber;
+    }
+
+    if (operation === "/") {
+      if (secondNumber === 0) {
+        setDisplay("Error");
+        setFirstNumber(null);
+        setOperation(null);
+        setWaitingForSecondNumber(false);
+        return;
+      }
+
+      result = firstNumber / secondNumber;
+    }
+
+    setDisplay(String(result));
+    setFirstNumber(null);
+    setOperation(null);
+    setWaitingForSecondNumber(false);
   }
 
   // Keyboard support
@@ -125,42 +145,24 @@ function App() {
 
       if (key >= "0" && key <= "9") {
         handleNumber(key);
-      }
-
-      else if (key === ".") {
+      } else if (key === ".") {
         handleDecimal();
-      }
-
-      else if (key === "+") {
-        handleAddition();
-      }
-
-      else if (key === "-") {
-        handleSubtraction();
-      }
-
-      else if (key === "*") {
-        handleMultiplication();
-      }
-
-      else if (key === "/") {
+      } else if (key === "+") {
+        handleOperator("+");
+      } else if (key === "-") {
+        handleOperator("-");
+      } else if (key === "*") {
+        handleOperator("*");
+      } else if (key === "/") {
         event.preventDefault();
-        handleDivision();
-      }
-
-      else if (key === "%") {
+        handleOperator("/");
+      } else if (key === "%") {
         handlePercentage();
-      }
-
-      else if (key === "Enter" || key === "=") {
+      } else if (key === "Enter" || key === "=") {
         handleEquals();
-      }
-
-      else if (key === "Backspace") {
+      } else if (key === "Backspace") {
         handleDelete();
-      }
-
-      else if (key === "Escape") {
+      } else if (key === "Escape") {
         handleClear();
       }
     }
@@ -172,15 +174,24 @@ function App() {
     };
   });
 
+  // Display
+  let screenValue = display;
+
+  if (firstNumber !== null && operation !== null) {
+    if (waitingForSecondNumber) {
+      screenValue = `${firstNumber} ${operation}`;
+    } else {
+      screenValue = `${firstNumber} ${operation} ${display}`;
+    }
+  }
+
   return (
     <div className="calculator">
 
-      {/* Calculator Display */}
       <div className="display">
-        {display}
+        {screenValue}
       </div>
 
-      {/* Calculator Buttons */}
       <div className="buttons">
 
         <button className="clear" onClick={handleClear}>
@@ -195,7 +206,10 @@ function App() {
           %
         </button>
 
-        <button className="operator" onClick={handleDivision}>
+        <button
+          className="operator"
+          onClick={() => handleOperator("/")}
+        >
           ÷
         </button>
 
@@ -203,7 +217,10 @@ function App() {
         <button onClick={() => handleNumber("8")}>8</button>
         <button onClick={() => handleNumber("9")}>9</button>
 
-        <button className="operator" onClick={handleMultiplication}>
+        <button
+          className="operator"
+          onClick={() => handleOperator("*")}
+        >
           ×
         </button>
 
@@ -211,7 +228,10 @@ function App() {
         <button onClick={() => handleNumber("5")}>5</button>
         <button onClick={() => handleNumber("6")}>6</button>
 
-        <button className="operator" onClick={handleSubtraction}>
+        <button
+          className="operator"
+          onClick={() => handleOperator("-")}
+        >
           −
         </button>
 
@@ -219,7 +239,10 @@ function App() {
         <button onClick={() => handleNumber("2")}>2</button>
         <button onClick={() => handleNumber("3")}>3</button>
 
-        <button className="operator" onClick={handleAddition}>
+        <button
+          className="operator"
+          onClick={() => handleOperator("+")}
+        >
           +
         </button>
 
@@ -234,7 +257,10 @@ function App() {
           .
         </button>
 
-        <button className="equals" onClick={handleEquals}>
+        <button
+          className="equals"
+          onClick={handleEquals}
+        >
           =
         </button>
 
