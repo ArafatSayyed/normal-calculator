@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
-function App() {
+function App()
+{
   const [display, setDisplay] = useState("0");
   const [firstNumber, setFirstNumber] = useState(null);
   const [operation, setOperation] = useState(null);
   const [waitingForSecondNumber, setWaitingForSecondNumber] = useState(false);
 
   // Button click sound
-  function playClickSound() {
+  function playClickSound()
+  {
     const audioContext = new AudioContext();
 
     const oscillator = audioContext.createOscillator();
@@ -25,38 +27,50 @@ function App() {
   }
 
   // Number button
-  function handleNumber(number) {
+  function handleNumber(number)
+  {
     playClickSound();
 
-    if (display === "Error") {
+    if (display === "Error")
+    {
       setDisplay(number);
       return;
     }
 
-    if (waitingForSecondNumber) {
+    if (waitingForSecondNumber)
+    {
       setDisplay(number);
       setWaitingForSecondNumber(false);
-    } else if (display === "0") {
+    }
+    else if (display === "0")
+    {
       setDisplay(number);
-    } else {
+    }
+    else
+    {
       setDisplay(display + number);
     }
   }
 
   // Decimal
-  function handleDecimal() {
+  function handleDecimal()
+  {
     playClickSound();
 
-    if (waitingForSecondNumber) {
+    if (waitingForSecondNumber)
+    {
       setDisplay("0.");
       setWaitingForSecondNumber(false);
-    } else if (!display.includes(".")) {
+    }
+    else if (!display.includes("."))
+    {
       setDisplay(display + ".");
     }
   }
 
   // AC
-  function handleClear() {
+  function handleClear()
+  {
     playClickSound();
 
     setDisplay("0");
@@ -66,18 +80,23 @@ function App() {
   }
 
   // DEL
-  function handleDelete() {
+  function handleDelete()
+{
     playClickSound();
 
-    if (display === "Error" || display.length === 1) {
+    if (display === "Error" || display.length === 1)
+    {
       setDisplay("0");
-    } else {
+    }
+    else
+    {
       setDisplay(display.slice(0, -1));
     }
   }
 
   // Operator
-  function handleOperator(operator) {
+  function handleOperator(operator)
+  {
     playClickSound();
 
     const number = Number(display);
@@ -88,7 +107,8 @@ function App() {
   }
 
   // Percentage
-  function handlePercentage() {
+  function handlePercentage()
+  {
     playClickSound();
 
     const number = Number(display);
@@ -98,37 +118,43 @@ function App() {
   }
 
   // Equal
-  function handleEquals() {
+  function handleEquals()
+  {
     playClickSound();
 
-    if (firstNumber === null || operation === null) {
+    if (firstNumber === null || operation === null)
+    {
       return;
     }
 
     const secondNumber = Number(display);
     let result;
 
-    if (operation === "+") {
+    if (operation === "+")
+    {
       result = firstNumber + secondNumber;
     }
 
-    if (operation === "-") {
+    if (operation === "-")
+    {
       result = firstNumber - secondNumber;
     }
 
-    if (operation === "*") {
+    if (operation === "*")
+    {
       result = firstNumber * secondNumber;
     }
 
-    if (operation === "/") {
-      if (secondNumber === 0) {
+    if (operation === "/")
+    {
+      if (secondNumber === 0)
+      {
         setDisplay("Error");
         setFirstNumber(null);
         setOperation(null);
         setWaitingForSecondNumber(false);
         return;
       }
-
       result = firstNumber / secondNumber;
     }
 
@@ -140,29 +166,49 @@ function App() {
 
   // Keyboard support
   useEffect(() => {
-    function handleKeyDown(event) {
+    function handleKeyDown(event)
+    {
       const key = event.key;
 
-      if (key >= "0" && key <= "9") {
+      if (key >= "0" && key <= "9")
+      {
         handleNumber(key);
-      } else if (key === ".") {
+      }
+      else if (key === ".")
+      {
         handleDecimal();
-      } else if (key === "+") {
+      }
+      else if (key === "+")
+      {
         handleOperator("+");
-      } else if (key === "-") {
+      }
+      else if (key === "-")
+      {
         handleOperator("-");
-      } else if (key === "*") {
+      }
+      else if (key === "*")
+      {
         handleOperator("*");
-      } else if (key === "/") {
+      }
+      else if (key === "/")
+      {
         event.preventDefault();
         handleOperator("/");
-      } else if (key === "%") {
+      }
+      else if (key === "%")
+      {
         handlePercentage();
-      } else if (key === "Enter" || key === "=") {
+      }
+      else if (key === "Enter" || key === "=")
+      {
         handleEquals();
-      } else if (key === "Backspace") {
+      }
+      else if (key === "Backspace")
+      {
         handleDelete();
-      } else if (key === "Escape") {
+      }
+      else if (key === "Escape")
+      {
         handleClear();
       }
     }
@@ -177,10 +223,14 @@ function App() {
   // Display
   let screenValue = display;
 
-  if (firstNumber !== null && operation !== null) {
-    if (waitingForSecondNumber) {
+  if (firstNumber !== null && operation !== null)
+  {
+    if (waitingForSecondNumber)
+    {
       screenValue = `${firstNumber} ${operation}`;
-    } else {
+    }
+    else
+    {
       screenValue = `${firstNumber} ${operation} ${display}`;
     }
   }
